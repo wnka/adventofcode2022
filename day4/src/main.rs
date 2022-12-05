@@ -28,6 +28,12 @@ struct Schedule {
     end: usize,
 }
 
+impl Schedule {
+    fn contains(&self, other: &Self) -> bool {
+        self.start <= other.start && self.end >= other.end
+    }
+}
+
 impl fmt::Display for Groups {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Group 1: {}, Group 2: {}", self.group1, self.group2)
@@ -66,9 +72,9 @@ fn main() -> Result<(), ParseError> {
     let input_file = File::open(args.input).unwrap();
     let input_ranges = parse(BufReader::new(input_file))?;
 
-    for range in input_ranges {
-        println!("{}", range)
-    }
+    let contains_count = input_ranges.iter().filter(|x| x.group1.contains(&x.group2) || x.group2.contains(&x.group1)).count();
+
+    println!("Contains count = {}", contains_count);
 
     Ok(())
 }
