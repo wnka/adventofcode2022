@@ -1,7 +1,7 @@
 use std::{fs::File, io::{BufRead, BufReader}};
 
 use clap::Parser;
-use sets::{Set,MutSetOps};
+use std::collections::HashSet;
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
@@ -26,11 +26,11 @@ struct Rucksack {
 impl Rucksack {
     fn common_elements(&self) -> Vec<char> {
         let mut retval = Vec::new();
-        let set_one = Set::new_ordered(self.one.as_bytes(), true);
-        let set_two = Set::new_ordered(self.two.as_bytes(), true);
-        let sames = set_one.intersection(&set_two);
-        for item in sames.data {
-            retval.push(char::from(item));
+        let set_one: HashSet<char> = HashSet::from_iter(self.one.chars());
+        let set_two: HashSet<char> = HashSet::from_iter(self.two.chars());
+        let sames : Vec<&char> = set_one.intersection(&set_two).collect();
+        for ch in sames {
+            retval.push(*ch);
         }
         retval
     }
