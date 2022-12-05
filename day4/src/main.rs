@@ -32,6 +32,12 @@ impl Schedule {
     fn contains(&self, other: &Self) -> bool {
         self.start <= other.start && self.end >= other.end
     }
+
+    fn overlaps(&self, other: &Self) -> bool {
+        // example
+        // 1-3, 2-4
+        self.start <= other.start && self.end >= other.start
+    }
 }
 
 impl fmt::Display for Groups {
@@ -75,6 +81,10 @@ fn main() -> Result<(), ParseError> {
     let contains_count = input_ranges.iter().filter(|x| x.group1.contains(&x.group2) || x.group2.contains(&x.group1)).count();
 
     println!("Contains count = {}", contains_count);
+
+    let overlaps_count = input_ranges.iter().filter(|x| x.group1.overlaps(&x.group2) || x.group2.overlaps(&x.group1)).count();
+
+    println!("Overlaps count = {}", overlaps_count);
 
     Ok(())
 }
