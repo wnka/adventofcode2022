@@ -54,7 +54,7 @@ fn main() -> Result<(), ParseError> {
 
     elf_cals.iter().for_each(|e| elf_heap.push(*e));
 
-    let top_3_sum = elf_heap.pop().unwrap() + elf_heap.pop().unwrap() + elf_heap.pop().unwrap();
+    let top_3_sum : u32 = elf_heap.into_sorted_vec().iter().rev().take(3).sum();
 
     println!("Top 3 sum: {}", top_3_sum);
 
