@@ -59,7 +59,6 @@ fn parse_entry(i: &str) -> IResult<&str, Entry> {
         separated_pair(nom::character::complete::u64, tag(" "), parse_path),
         |(size, path)| Entry::File(size, path),
     );
-
     let parse_dir = map(preceded(tag("dir "), parse_path), Entry::Dir);
 
     alt((parse_dir, parse_file))(i)
@@ -80,13 +79,11 @@ fn parse_line(i: &str) -> IResult<&str, Line> {
 
 fn parse<T>(input_buffer: T) -> Result<Vec<Line>, ParseError> where T: BufRead {
     let lines = BufReader::new(input_buffer).lines();
-//    let lines = include_str!("../input.txt").lines();
-    let plines = lines.map(|l| {
+    Ok(lines.map(|l| {
         let l_temp = l.unwrap();
         let result = all_consuming(parse_line)(l_temp.as_str()).finish().unwrap().1;
         result
-    }).collect();
-    Ok(plines)
+    }).collect())
 }
 
 fn main() -> Result<(), ParseError> {
